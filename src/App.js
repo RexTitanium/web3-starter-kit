@@ -1,20 +1,21 @@
 import { useState, useEffect } from 'react';
 import './App.css';
+import AccountButton from './components/AccountButton';
 import Navbar from './components/Navbar';
-
+import Posts from './components/Posts/Posts';
 function App(props) {
 
   const [web3, setWeb3] = useState()
   const [alephAccount, setAlephAccount] = useState()
-  const [account, setAccount] = useState()
+  const [walletAddress, setWalletAddress] = useState()
 
   const connectWallet = async (e) => {
     const { alephAccount, web3 } = await props.connectWeb3(e)
-    const accounts = await web3.eth.getAccounts()
+    const walletAddress = await web3.eth.getAccounts()
 
     setWeb3(web3)
     setAlephAccount(alephAccount)
-    setAccount(accounts[0])
+    setWalletAddress(walletAddress[0])
   }
 
   useEffect(() => {
@@ -25,7 +26,15 @@ function App(props) {
 
   return (
     <div className="App">
-      <Navbar connectWallet={connectWallet} account={account} />
+      <Navbar/>
+      <AccountButton connectWallet={connectWallet} walletAddress={walletAddress} />
+      <div className='container'>
+        <div className='row'>
+          <div className='col-9 offset-3'>
+            <Posts />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
